@@ -1,15 +1,19 @@
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import config from "config";
-import logger from "./utils/logger";
-import { version } from "../package.json";
 
-import socket from "./socket";
+import logger from "./utils/logger.js";
+import socket from "./socket.js";
 
-// const host = config.get<string>("host");
-const PORT = process.env.PORT || config.get<number>("port");
-const corsOrigin = config.get<string>("corsOrigin");
+const config = {
+  corsOrigin: "*",
+  port: 4000,
+  host: "localhost",
+};
+
+const PORT = process.env.PORT || config.port;
+const corsOrigin = config.corsOrigin;
+const version = "0.1";
 
 const app = express();
 

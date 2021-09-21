@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid";
-import { Server, Socket } from "socket.io";
-import logger from "./utils/logger";
+import logger from "./utils/logger.js";
 
 const EVENTS = {
   connection: "connection",
@@ -16,12 +15,12 @@ const EVENTS = {
   },
 };
 
-const rooms: Record<string, { name: string }> = {};
+const rooms = {};
 
-function socket({ io }: { io: Server }) {
+function socket({ io }) {
   logger.info(`Sockets enabled`);
 
-  io.on(EVENTS.connection, (socket: Socket) => {
+  io.on(EVENTS.connection, (socket) => {
     logger.info(`User connected ${socket.id}`);
 
     socket.emit(EVENTS.SERVER.ROOMS, rooms);
