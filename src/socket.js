@@ -30,11 +30,20 @@ function socket({ io }) {
      */
     socket.on(EVENTS.CLIENT.CREATE_ROOM, ({ roomName }) => {
       console.log({ roomName });
+      if (!roomName) {
+        console.log("не передано имя комнаты!");
+        return false;
+      }
+      if (Object.values(rooms).some((room) => room.name === roomName)) {
+        console.log("такая комната уже есть!");
+        return false;
+      }
       // create a roomId
       const roomId = nanoid();
       // add a new room to the rooms object
       rooms[roomId] = {
         name: roomName,
+        id: roomId,
       };
 
       socket.join(roomId);
@@ -51,10 +60,10 @@ function socket({ io }) {
     /*
      * When a user sends a room message
      */
-
     socket.on(
       EVENTS.CLIENT.SEND_ROOM_MESSAGE,
       ({ roomId, message, username }) => {
+        // logger.info(`new mes: roomId - ${roomId}, text - ${message} - ${username}`);
         const date = new Date();
 
         socket.to(roomId).emit(EVENTS.SERVER.ROOM_MESSAGE, {
