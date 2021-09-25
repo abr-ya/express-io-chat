@@ -1,0 +1,43 @@
+{
+  "game": [
+    {
+      "id": "TVasX8",
+      "status": "lobby",
+      "current_task": 1,
+      "settings": {
+        "is_master_player": true,
+        "is_auto_card_open": true,
+        "score_type": "story point",
+        "score_type_short": "SP",
+        "round_time": 120,
+        "cards": [1, 2, 3, 5, 8, "?", "coffee"]
+      }
+    },
+    {
+      "id": "kimaF0",
+      "status": "lobby",
+      "current_task": 1,
+      "settings": {
+        "is_master_player": true,
+        "is_auto_card_open": true,
+        "score_type": "story point",
+        "score_type_short": "SP",
+        "round_time": 120,
+        "cards": [1, 2, 3, 5, 8, "?", "coffee"]
+      }
+    },
+    {
+      "id": "SnwO4o",
+      "status": "lobby",
+      "current_task": 1,
+      "settings": {
+        "is_master_player": true,
+        "is_auto_card_open": true,
+        "score_type": "story point",
+        "score_type_short": "SP",
+        "round_time": 120,
+        "cards": [1, 2, 3, 5, 8, "?", "coffee"]
+      }
+    }
+  ]
+}

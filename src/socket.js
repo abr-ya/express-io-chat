@@ -1,6 +1,11 @@
 import { nanoid } from "nanoid";
 import logger from "./utils/logger.js";
 
+// отдавать данные из бд по сокетам - пока не используем
+import user from "./routes/user.js";
+import game from "./routes/game.js";
+import task from "./routes/task.js";
+
 const EVENTS = {
   connection: "connection",
   CLIENT: {
@@ -17,7 +22,7 @@ const EVENTS = {
 
 const rooms = {};
 
-function socket({ io }) {
+const socket = ({ io }) => {
   logger.info(`Sockets enabled`);
 
   io.on(EVENTS.connection, (socket) => {
@@ -29,7 +34,7 @@ function socket({ io }) {
      * When a user creates a new room
      */
     socket.on(EVENTS.CLIENT.CREATE_ROOM, ({ roomName }) => {
-      console.log({ roomName });
+      console.log('создаём комнату', roomName);
       if (!roomName) {
         console.log("не передано имя комнаты!");
         return false;
