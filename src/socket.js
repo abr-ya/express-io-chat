@@ -1,6 +1,5 @@
 import { nanoid } from "nanoid";
-import { Server, Socket } from "socket.io";
-import logger from "./utils/logger";
+import logger from "./utils/logger.js";
 
 const EVENTS = {
   connection: "connection",
@@ -16,12 +15,12 @@ const EVENTS = {
   },
 };
 
-const rooms: Record<string, { name: string }> = {};
+const rooms = {};
 
-function socket({ io }: { io: Server }) {
+function socket({ io }) {
   logger.info(`Sockets enabled`);
 
-  io.on(EVENTS.connection, (socket: Socket) => {
+  io.on(EVENTS.connection, (socket) => {
     logger.info(`User connected ${socket.id}`);
 
     socket.emit(EVENTS.SERVER.ROOMS, rooms);
@@ -31,11 +30,20 @@ function socket({ io }: { io: Server }) {
      */
     socket.on(EVENTS.CLIENT.CREATE_ROOM, ({ roomName }) => {
       console.log({ roomName });
+      if (!roomName) {
+        console.log("не передано имя комнаты!");
+        return false;
+      }
+      if (Object.values(rooms).some((room) => room.name === roomName)) {
+        console.log("такая комната уже есть!");
+        return false;
+      }
       // create a roomId
       const roomId = nanoid();
       // add a new room to the rooms object
       rooms[roomId] = {
         name: roomName,
+        id: roomId,
       };
 
       socket.join(roomId);
@@ -52,10 +60,10 @@ function socket({ io }: { io: Server }) {
     /*
      * When a user sends a room message
      */
-
     socket.on(
       EVENTS.CLIENT.SEND_ROOM_MESSAGE,
       ({ roomId, message, username }) => {
+        // logger.info(`new mes: roomId - ${roomId}, text - ${message} - ${username}`);
         const date = new Date();
 
         socket.to(roomId).emit(EVENTS.SERVER.ROOM_MESSAGE, {
