@@ -45,7 +45,7 @@
       "first_name": "Thunder",
       "last_name": "User",
       "position": "tester",
-      "image": "28462.jpg",
+      "image": "milyy-kotik.jpg",
       "is_observer": false,
       "is_master": true
     },
@@ -54,7 +54,7 @@
       "first_name": "Thunder2",
       "last_name": "User2",
       "position": "tester",
-      "image": "28462.jpg",
+      "image": "kotik-s-sharikami.jpg",
       "is_observer": false,
       "is_master": true,
       "game": "TVasX8"
@@ -65,7 +65,7 @@
       "last_name": "2",
       "position": "3",
       "is_observer": false,
-      "image": "28462.jpg",
+      "image": "milyy-kotik.jpg",
       "is_master": false,
       "game": "12345"
     },
@@ -95,7 +95,7 @@
       "last_name": "23",
       "position": "34",
       "is_observer": false,
-      "image": "preview_kotik-s-sharikami.png",
+      "image": "kotik-s-sharikami.jpg",
       "is_master": false,
       "game": "12345"
     },
@@ -105,7 +105,7 @@
       "last_name": "test1",
       "position": "jun",
       "is_observer": false,
-      "image": "28462.jpg",
+      "image": "kotik-s-sharikami.jpg",
       "is_master": false,
       "game": "12345"
     }

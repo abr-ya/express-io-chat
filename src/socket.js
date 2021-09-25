@@ -10,6 +10,7 @@ const EVENTS = {
   connection: "connection",
   CLIENT: {
     CREATE_ROOM: "CREATE_ROOM",
+    CREATE_TASK: "CREATE_TASK",
     SEND_ROOM_MESSAGE: "SEND_ROOM_MESSAGE",
     JOIN_ROOM: "JOIN_ROOM",
   },
@@ -61,6 +62,22 @@ const socket = ({ io }) => {
       // emit event back the room creator saying they have joined a room
       socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
     });
+
+    /*
+     * When a user creates a new task
+     */
+    socket.on(EVENTS.CLIENT.CREATE_TASK, ({ roomName, num, title, link, priority }) => {
+      console.log('создаём таску', roomName, num, title, link, priority);
+      const roomID = Object.values(rooms).find((room) => room.name === roomName);
+
+      // broadcast an event saying there is a new room
+      //socket.broadcast.emit(EVENTS.SERVER.ROOMS, rooms);
+
+      // emit back to the room creator with all the rooms
+      //socket.emit(EVENTS.SERVER.ROOMS, rooms);
+      // emit event back the room creator saying they have joined a room
+      //socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
+    });    
 
     /*
      * When a user sends a room message
