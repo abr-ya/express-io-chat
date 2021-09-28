@@ -22,4 +22,10 @@ router.post('/', (req, res) => {
   res.status(201).json({ newTask });
 });
 
-export default {router, db};
+const taskToBase = (task) => {
+  const newTask = { id: nanoid(6), ...task }
+  db.get("task").push(newTask).write();
+  return newTask;
+}
+
+export default {router, db, taskToBase};
