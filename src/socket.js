@@ -109,6 +109,25 @@ const socket = ({ io }) => {
       socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
       socket.broadcast.emit(EVENTS.SERVER.USERS, users);
     });
+
+
+    /*
+     * STAGE EVENTS
+     */
+    socket.on(EVENTS.MASTER.TO_LOBBY, () => {
+      // socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId); // ответ
+      socket.broadcast.emit(EVENTS.SERVER.TO_LOBBY, {}); // остальным
+    });
+
+    socket.on(EVENTS.MASTER.TO_GAME, () => {
+      // socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId); // ответ
+      socket.broadcast.emit(EVENTS.SERVER.TO_GAME, {}); // остальным
+    });
+
+    socket.on(EVENTS.MASTER.TO_RESULT, () => {
+      // socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId); // ответ
+      socket.broadcast.emit(EVENTS.SERVER.TO_RESULT, {}); // остальным
+    });
   });
 }
 
