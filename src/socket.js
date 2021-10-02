@@ -22,26 +22,30 @@ const socket = ({ io }) => {
     /*
      * When a user creates a new room
      */
-    socket.on(EVENTS.CLIENT.CREATE_ROOM, ({ roomName }) => {
+    socket.on(EVENTS.CLIENT.CREATE_ROOM, (roomName) => {
       console.log('создаём комнату', roomName);
       if (!roomName) {
         console.log("не передано имя комнаты!");
         return false;
       }
+      const roomId = roomName;
       if (Object.values(rooms).some((room) => room.name === roomName)) {
         console.log("такая комната уже есть!");
-        return false;
+        // return false;
+      } else {
+        // create a roomId
+        // const roomId = nanoid(); name === id
+        // add a new room to the rooms object
+        rooms[roomId] = {
+          name: roomName,
+          id: roomId,
+        };
+        tasks[roomId] = [];
       }
-      // create a roomId
-      const roomId = nanoid();
-      // add a new room to the rooms object
-      rooms[roomId] = {
-        name: roomName,
-        id: roomId,
-      };
-      tasks[roomId] = [];
 
       socket.join(roomId);
+      const clients = io.sockets.adapter.rooms.get(roomId);
+      console.log('пользователи комнаты', roomId, clients);
 
       // broadcast an event saying there is a new room
       socket.broadcast.emit(EVENTS.SERVER.ROOMS, rooms);
