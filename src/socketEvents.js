@@ -9,8 +9,10 @@ const EVENTS = {
   SERVER: {
     ROOMS: "ROOMS",
     TASKS: "TASKS",
+    USERS: "USERS",
     JOINED_ROOM: "JOINED_ROOM",
     ROOM_MESSAGE: "ROOM_MESSAGE",
+    GAME_START: "GAME_START",
   },
 };
 

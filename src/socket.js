@@ -11,6 +11,14 @@ import task from "./routes/task.js";
 const rooms = {};
 const tasks = {};
 
+const afterJoin = (io, roomId) => {
+  const clients = io.sockets.adapter.rooms.get(roomId);
+  const users = Array.from(clients);
+  console.log('пользователи комнаты', roomId, users);
+
+  return users;
+};
+
 const socket = ({ io }) => {
   logger.info(`Sockets enabled`);
 
@@ -44,8 +52,9 @@ const socket = ({ io }) => {
       }
 
       socket.join(roomId);
-      const clients = io.sockets.adapter.rooms.get(roomId);
-      console.log('пользователи комнаты', roomId, clients);
+      const users = afterJoin(io, roomId);
+      socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
+      socket.broadcast.emit(EVENTS.SERVER.USERS, users);
 
       // broadcast an event saying there is a new room
       socket.broadcast.emit(EVENTS.SERVER.ROOMS, rooms);
@@ -96,10 +105,9 @@ const socket = ({ io }) => {
      */
     socket.on(EVENTS.CLIENT.JOIN_ROOM, (roomId) => {
       socket.join(roomId);
-      const clients = io.sockets.adapter.rooms.get(roomId);
-      logger.info('пользователи комнаты', roomId, clients);
-
+      const users = afterJoin(io, roomId);
       socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId);
+      socket.broadcast.emit(EVENTS.SERVER.USERS, users);
     });
   });
 }
