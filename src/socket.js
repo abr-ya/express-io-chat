@@ -7,7 +7,13 @@ import user from "./routes/user.js";
 import game from "./routes/game.js";
 import task from "./routes/task.js";
 
-// "серверные" данные
+// подготовка
+const allUsers = user.db.get("user").value();
+const allTasks = task.db.get("task").value();
+const allGames = game.db.get("game").value();
+
+
+// "серверные" данные, ключ - id комнаты
 const rooms = {};
 const tasks = {};
 
@@ -50,6 +56,7 @@ const socket = ({ io }) => {
         };
         tasks[roomId] = [];
       }
+      console.log('tasks', tasks);
 
       socket.join(roomId);
       const users = afterJoin(io, roomId);
@@ -68,11 +75,13 @@ const socket = ({ io }) => {
     /*
      * When a user creates a new task
      */
-    socket.on(EVENTS.CLIENT.CREATE_TASK, ({ roomId, title, link, priority }) => {
-      console.log('создаём в комнате', roomId, 'таску', title, link, priority);
+    socket.on(EVENTS.CLIENT.CREATE_TASK, ({ roomId, issueText, link, priority }) => {
+      console.log('создаём в комнате', roomId, 'таску', issueText, link, priority);
       //const roomID = Object.values(rooms).find((room) => room.name === roomName);
       //const newTask = task.taskToBase({title, link, priority});
-      tasks[roomId].push({id: nanoid(6), title, link, priority});
+      if (roomId && tasks[roomId] && Array.isArray(tasks[roomId])) {
+        tasks[roomId].push({id: nanoid(6), issueText, link, priority});
+      }
 
       // broadcast an event saying there is a new room
       //socket.broadcast.emit(EVENTS.SERVER.ROOMS, rooms);
@@ -115,13 +124,23 @@ const socket = ({ io }) => {
      * STAGE EVENTS
      */
     socket.on(EVENTS.MASTER.TO_LOBBY, () => {
+      const room = 'TVasX8';
+      const users = allUsers.filter(el => el.game === room);
       // socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId); // ответ
-      socket.broadcast.emit(EVENTS.SERVER.TO_LOBBY, {}); // остальным
+      socket.broadcast.emit(EVENTS.SERVER.TO_LOBBY, {users}); // остальным
     });
 
     socket.on(EVENTS.MASTER.TO_GAME, () => {
+      const room = 'TVasX8';
+      const users = allUsers.filter(el => el.game === room);
+      // const tasks = allTasks.filter(el => el.game === room);
+      const game = allGames.filter(el => el.id === room)[0];
       // socket.emit(EVENTS.SERVER.JOINED_ROOM, roomId); // ответ
-      socket.broadcast.emit(EVENTS.SERVER.TO_GAME, {}); // остальным
+      socket.broadcast.emit(EVENTS.SERVER.TO_GAME, {
+        game, 
+        users,
+        tasks: tasks[room],
+      }); // остальным
     });
 
     socket.on(EVENTS.MASTER.TO_RESULT, () => {
