@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import logger from "./utils/logger.js";
+import dayjs from "dayjs";
 
 const EVENTS = {
   connection: "connection",
@@ -12,6 +13,7 @@ const EVENTS = {
     ROOMS: "ROOMS",
     JOINED_ROOM: "JOINED_ROOM",
     ROOM_MESSAGE: "ROOM_MESSAGE",
+    TEST: "TEST",
   },
 };
 
@@ -24,6 +26,11 @@ function socket({ io }) {
     logger.info(`User connected ${socket.id}`);
 
     socket.emit(EVENTS.SERVER.ROOMS, rooms);
+
+    setInterval(() => {
+      // logger.info(`отправляю тест на ${socket.id}`);
+      socket.emit(EVENTS.SERVER.TEST, `socket.id:, ${socket.id}! (time: ${dayjs().format()})`);
+    }, 1900);
 
     /*
      * When a user creates a new room
